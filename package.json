@@ -6,10 +6,10 @@
     "scripts": {
         "start": "concurrently \"yarn dev\" \"yarn run ts:scss:watch\"",
         "dev": "vite",
-        "build": "tsc && vite build --base=./",
+        "build": "tsc && vite build",
         "build:server": "tsc server/*.ts --outDir build",
         "start:server": "node build/index.js",
-        "dev:server": "nodemon server/index.ts",
+        "dev:server": "nodemon --es-module-specifier-resolution=node server/index.ts",
         "preview": "vite preview",
         "ts:scss:build": "yarn typed-scss-modules client",
         "ts:scss:watch": "yarn typed-scss-modules client --outputFolder __generated__ --watch",

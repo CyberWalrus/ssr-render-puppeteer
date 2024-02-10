@@ -1,9 +1,13 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable no-console */
 import express from 'express';
+import { fileURLToPath } from 'node:url';
+import path from 'path';
 
 import { PAGE_URL, PORT } from './constants';
 import { initSSR } from './init-ssr';
+
+const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const app = express();
 
@@ -18,6 +22,8 @@ app.get('/', async (req, res) => {
         res.send(error);
     }
 });
+
+app.use(express.static(path.join(dirname, '../dist')));
 
 app.listen(PORT, () => {
     console.log(`Example app listening on port ${PORT}`);

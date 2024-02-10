@@ -14,15 +14,11 @@ export const initSSR = () => {
         const html = await generateSSR(url);
 
         setCache(url, html);
+
+        return html;
     };
 
     const updateSSR = async (url: string) => {
-        const cache = getCache(url);
-
-        if (cache) {
-            return cache;
-        }
-
         const html = await generateSSR(url);
 
         setCache(url, html);
