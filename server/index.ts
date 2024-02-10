@@ -1,22 +1,24 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable no-console */
 import express from 'express';
-import puppeteer from 'puppeteer';
+
+import { PAGE_URL, PORT } from './constants';
+import { initSSR } from './init-ssr';
 
 const app = express();
-const port = 3000;
 
-app.get('/', (req, res) => {
-    const run = async () => {
-        const browser = await puppeteer.launch();
-        const page = await browser.newPage();
-        await page.goto('http://localhost:4173/');
-        await page.screenshot({ path: 'screenshot/screenshot.png' });
-        browser.close().catch(console.log);
-        res.sendFile('../screenshot/screenshot.png');
-    };
-    run().catch(console.log);
+const { getSSR } = initSSR();
+
+app.get('/', async (req, res) => {
+    try {
+        const html = await getSSR(PAGE_URL);
+
+        return res.status(200).send(html);
+    } catch (error) {
+        res.send(error);
+    }
 });
 
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`);
+app.listen(PORT, () => {
+    console.log(`Example app listening on port ${PORT}`);
 });
