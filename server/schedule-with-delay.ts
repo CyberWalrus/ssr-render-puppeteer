@@ -1,18 +1,19 @@
 /* eslint-disable no-constant-condition */
 /* eslint-disable no-console */
 /* eslint-disable no-await-in-loop */
+import { DEFAULT_LOOP_DELAY } from './constants';
 
 type ScheduleWithDelayProps = {
-    shouldStop: () => Promise<boolean> | boolean;
     task: () => Promise<void> | void;
     hasStartDelay?: boolean;
+    shouldStop?: () => Promise<boolean> | boolean;
     timeout?: number;
 };
 
 export const scheduleWithDelay = async ({
     task,
     shouldStop,
-    timeout = 10_000,
+    timeout = DEFAULT_LOOP_DELAY,
     hasStartDelay = false,
 }: ScheduleWithDelayProps) => {
     if (hasStartDelay) {
@@ -23,7 +24,7 @@ export const scheduleWithDelay = async ({
 
     while (true) {
         try {
-            const isStop = await shouldStop();
+            const isStop = await shouldStop?.();
 
             if (isStop) {
                 return;
