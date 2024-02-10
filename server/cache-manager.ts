@@ -45,6 +45,7 @@ export const createCacheManager = (initialUrls?: string[]) => {
             expiryTimers.delete(key);
         }
 
+        addUrl(key);
         cacheStorage.set(key, value);
 
         const expiryTimer = setTimeout(() => {

@@ -5,17 +5,17 @@ import { fileURLToPath } from 'node:url';
 import path from 'path';
 
 import { PAGE_URL, PORT } from './constants';
-import { initSSR } from './init-ssr';
+import { initializeSSR } from './initialize-ssr';
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const app = express();
 
-const { getSSR } = initSSR();
+const { getRenderedContent } = initializeSSR([PAGE_URL]);
 
 app.get('/', async (req, res) => {
     try {
-        const html = await getSSR(PAGE_URL);
+        const html = await getRenderedContent(PAGE_URL);
 
         return res.status(200).send(html);
     } catch (error) {
