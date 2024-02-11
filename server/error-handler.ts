@@ -5,5 +5,8 @@ import type { ErrorRequestHandler } from 'express';
 
 export const errorHandler: ErrorRequestHandler = (err: Error, req, res, next) => {
     console.error(err);
-    res.status(500).json(JSON.parse(JSON.stringify(err, Object.getOwnPropertyNames(err))));
+
+    const error = JSON.parse(JSON.stringify(err, Object.getOwnPropertyNames(err))) as Record<string, string>;
+
+    res.status(500).json(error);
 };
