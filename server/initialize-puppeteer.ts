@@ -1,12 +1,12 @@
 /* eslint-disable no-console */
-import puppeteer from 'puppeteer';
+import { launch } from 'puppeteer';
 
 import { PUPPETEER_OPTIONS, REFRESH_BROWSER_TIMEOUT, WAIT_FOR_SELECTOR_TIMEOUT } from './constants';
 import { scheduleWithDelay } from './schedule-with-delay';
 
 export const initializePuppeteer = () => {
     let isLoading = false;
-    let browserInstance = puppeteer.launch(PUPPETEER_OPTIONS);
+    let browserInstance = launch(PUPPETEER_OPTIONS);
 
     const refreshBrowser = async () => {
         if (isLoading) {
@@ -16,7 +16,7 @@ export const initializePuppeteer = () => {
         const browser = await browserInstance;
         await browser.close();
 
-        browserInstance = puppeteer.launch(PUPPETEER_OPTIONS);
+        browserInstance = launch(PUPPETEER_OPTIONS);
         console.log(`Browser reopen`);
     };
 
