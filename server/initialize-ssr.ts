@@ -1,3 +1,4 @@
+/* eslint-disable no-throw-literal */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import { createCacheManager } from './cache-manager';
 import { initializePuppeteer } from './initialize-puppeteer';
@@ -10,7 +11,10 @@ export const initializeSSR = (initialURLs: string[]) => {
 
     const updateContent = async (url: string) => {
         const content = await generateSSR(url);
+
         setCache(url, content);
+
+        return content;
     };
 
     const forceUpdate = (url: string, hasStartDelay?: boolean) => {
@@ -28,17 +32,20 @@ export const initializeSSR = (initialURLs: string[]) => {
     };
 
     const getRenderedContent = async (url: string) => {
-        let content = getCache(url);
-        if (content) {
-            return content;
+        const cache = getCache(url);
+        if (cache) {
+            return cache;
         }
 
-        content = await generateSSR(url);
-        setCache(url, content);
+        const value = await updateContent(url);
+
+        if (value === null) {
+            return value;
+        }
 
         forceUpdate(url, true);
 
-        return content;
+        return value;
     };
 
     const initializeUpdates = () => {

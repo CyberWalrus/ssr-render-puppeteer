@@ -38,9 +38,6 @@ export const initializePuppeteer = () => {
             console.log(`SSR for ${url} took ${end - start}ms`);
 
             return html;
-        } catch (error) {
-            console.error(`SSR error for ${url}:`, error);
-            throw error;
         } finally {
             await page.close();
             isLoading = false;
