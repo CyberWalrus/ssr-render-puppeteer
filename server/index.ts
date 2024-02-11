@@ -5,25 +5,26 @@ import { fileURLToPath } from 'node:url';
 import path from 'path';
 
 import { PAGE_URL, PORT } from './constants';
+import { errorHandler } from './error-handler';
 import { initializeSSR } from './initialize-ssr';
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
+const { getRenderedContent } = initializeSSR([PAGE_URL]);
 
 const app = express();
 
-const { getRenderedContent } = initializeSSR([PAGE_URL]);
-
-app.get('/', async (req, res) => {
+app.get('/', async (req, res, next) => {
     try {
         const html = await getRenderedContent(PAGE_URL);
-
-        return res.status(200).send(html);
+        res.status(200).send(html);
     } catch (error) {
-        res.send(error);
+        next(error);
     }
 });
 
 app.use(express.static(path.join(dirname, '../dist')));
+
+app.use(errorHandler);
 
 app.listen(PORT, () => {
     console.log(`Example app listening on port ${PORT}`);

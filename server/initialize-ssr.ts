@@ -33,15 +33,12 @@ export const initializeSSR = (initialURLs: string[]) => {
 
     const getRenderedContent = async (url: string) => {
         const cache = getCache(url);
+
         if (cache) {
             return cache;
         }
 
         const value = await updateContent(url);
-
-        if (value === null) {
-            return value;
-        }
 
         forceUpdate(url, true);
 

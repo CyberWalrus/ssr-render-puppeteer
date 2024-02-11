@@ -1,17 +1,17 @@
 /* eslint-disable no-constant-condition */
 /* eslint-disable no-console */
 /* eslint-disable no-await-in-loop */
-// import { DEFAULT_LOOP_DELAY, DEFAULT_RETRY_DELAY } from './constants';
 
-import { DEFAULT_LOOP_DELAY, DEFAULT_RETRY_COUNT, DEFAULT_RETRY_DELAY } from './constants';
+import { DEFAULT_LOOP_DELAY, DEFAULT_RETRY_COUNT, DEFAULT_RETRY_DELAY, DEFAULT_START_DELAY } from './constants';
 
 type ScheduleWithDelayProps = {
     task: () => Promise<unknown> | unknown;
+    delay?: number;
     hasStartDelay?: boolean;
     retryCount?: number;
-    retryTimeout?: number;
+    retryDelay?: number;
     shouldStop?: () => Promise<boolean> | boolean;
-    timeout?: number;
+    startDelay?: number;
 };
 
 const setTimeoutPromise = (timeout: number) =>
@@ -22,15 +22,16 @@ const setTimeoutPromise = (timeout: number) =>
 export const scheduleWithDelay = async ({
     task,
     shouldStop = () => false,
-    timeout = DEFAULT_LOOP_DELAY,
-    retryTimeout = DEFAULT_RETRY_DELAY,
+    delay = DEFAULT_LOOP_DELAY,
+    startDelay = DEFAULT_START_DELAY,
+    retryDelay = DEFAULT_RETRY_DELAY,
     hasStartDelay = false,
     retryCount = DEFAULT_RETRY_COUNT,
 }: ScheduleWithDelayProps) => {
     let currentRetryCount = retryCount;
 
     if (hasStartDelay) {
-        await setTimeoutPromise(timeout);
+        await setTimeoutPromise(startDelay);
     }
 
     while (true) {
@@ -40,18 +41,18 @@ export const scheduleWithDelay = async ({
             }
 
             await task();
-            await setTimeoutPromise(timeout);
+            await setTimeoutPromise(delay);
             currentRetryCount = retryCount;
         } catch (error) {
             console.error('Task execution failed:', error);
 
             if (currentRetryCount <= 0) {
-                console.log('Exceeded maximum retry count');
+                console.error('Exceeded maximum retry count');
                 break;
             }
 
             currentRetryCount -= 1;
-            await setTimeoutPromise(retryTimeout);
+            await setTimeoutPromise(retryDelay);
         }
     }
 };

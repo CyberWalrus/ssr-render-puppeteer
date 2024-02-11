@@ -20,7 +20,7 @@ export const initializePuppeteer = () => {
         console.log(`Browser reopen`);
     };
 
-    scheduleWithDelay({ hasStartDelay: true, task: refreshBrowser, timeout: REFRESH_BROWSER_TIMEOUT }).catch(
+    scheduleWithDelay({ delay: REFRESH_BROWSER_TIMEOUT, hasStartDelay: true, task: refreshBrowser }).catch(
         console.error,
     );
 
