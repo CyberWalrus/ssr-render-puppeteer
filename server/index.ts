@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable no-console */
 import express from 'express';
+import expressStaticGzip from 'express-static-gzip';
 import { fileURLToPath } from 'node:url';
 import path from 'path';
 
@@ -21,11 +22,17 @@ app.get('/', async (req, res, next) => {
         next(error);
     }
 });
-
+app.use(
+    '/',
+    expressStaticGzip(path.join(dirname, '../dist'), {
+        enableBrotli: true,
+        orderPreference: ['br', 'gz'],
+    }),
+);
 app.use(express.static(path.join(dirname, '../dist')));
 
 app.use(errorHandler);
 
 app.listen(PORT, () => {
-    console.log(`Example app listening on port ${PORT}`);
+    console.log(`Example app listening on port http://localhost:${PORT}/`);
 });
