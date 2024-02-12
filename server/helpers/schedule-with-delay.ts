@@ -2,22 +2,9 @@
 /* eslint-disable no-console */
 /* eslint-disable no-await-in-loop */
 
-import { DEFAULT_LOOP_DELAY, DEFAULT_RETRY_COUNT, DEFAULT_RETRY_DELAY, DEFAULT_START_DELAY } from './constants';
-
-type ScheduleWithDelayProps = {
-    task: () => Promise<unknown> | unknown;
-    delay?: number;
-    hasStartDelay?: boolean;
-    retryCount?: number;
-    retryDelay?: number;
-    shouldStop?: () => Promise<boolean> | boolean;
-    startDelay?: number;
-};
-
-const setTimeoutPromise = (timeout: number) =>
-    new Promise((resolve) => {
-        setTimeout(resolve, timeout);
-    });
+import { DEFAULT_LOOP_DELAY, DEFAULT_RETRY_COUNT, DEFAULT_RETRY_DELAY, DEFAULT_START_DELAY } from '../constants';
+import type { ScheduleWithDelayProps } from '../types';
+import { setTimeoutPromise } from './set-timeout-promise';
 
 export const scheduleWithDelay = async ({
     task,

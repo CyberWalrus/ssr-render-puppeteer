@@ -1,10 +1,10 @@
 import type { RequestHandler } from 'express';
 
-import { FILE_REGEXP, PAGE_URL } from './constants';
-import type { CacheSSR } from './types';
+import { FILE_REGEXP, PAGE_URL } from '../constants';
+import type { SSRCache } from '../types';
 
 export const createSSRHandler =
-    (getSSRContent: (url: string) => Promise<CacheSSR>): RequestHandler =>
+    (getSSRContent: (url: string) => Promise<SSRCache>): RequestHandler =>
     async (req, res, next) => {
         try {
             if (FILE_REGEXP.test(req.path)) {

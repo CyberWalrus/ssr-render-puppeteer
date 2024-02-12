@@ -6,9 +6,8 @@ import { fileURLToPath } from 'node:url';
 import path from 'path';
 
 import { PAGE_URL, PORT } from './constants';
-import { errorHandler } from './error-handler';
-import { initializeSSR } from './initialize-ssr';
-import { createSSRHandler } from './ssr-handler';
+import { createSSRHandler, errorHandler } from './handlers';
+import { initializeSSR } from './ssr';
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 const { getSSRContent } = initializeSSR([PAGE_URL, `${PAGE_URL}about`]);

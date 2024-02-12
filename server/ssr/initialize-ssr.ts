@@ -1,15 +1,15 @@
 /* eslint-disable no-throw-literal */
 /* eslint-disable @typescript-eslint/no-floating-promises */
+import { DEFAULT_LIFETIME_UNKNOWN_PAGE } from '../constants';
+import { scheduleWithDelay } from '../helpers';
+import type { SSRCache } from '../types';
 import { createCacheManager } from './cache-manager';
-import { DEFAULT_LIFETIME_UNKNOWN_PAGE } from './constants';
 import { initializePuppeteer } from './initialize-puppeteer';
-import { scheduleWithDelay } from './schedule-with-delay';
-import type { CacheSSR } from './types';
 
 export const initializeSSR = (initialURLs: string[]) => {
     const { generateSSR } = initializePuppeteer();
     const { setCache, getCache, addKey, deleteKey, getKeys, resetTrackedKeys, hasKey } =
-        createCacheManager<CacheSSR>(initialURLs);
+        createCacheManager<SSRCache>(initialURLs);
     const ongoingUpdates = new Map<string, () => void>();
 
     const updateContent = async (url: string, expires?: number) => {

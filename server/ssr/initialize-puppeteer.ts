@@ -7,9 +7,9 @@ import {
     PUPPETEER_OPTIONS,
     REFRESH_BROWSER_TIMEOUT,
     WAIT_FOR_SELECTOR_TIMEOUT,
-} from './constants';
-import { scheduleWithDelay } from './schedule-with-delay';
-import type { CacheSSR } from './types';
+} from '../constants';
+import { scheduleWithDelay } from '../helpers';
+import type { SSRCache } from '../types';
 
 export const initializePuppeteer = () => {
     let isLoading = false;
@@ -71,7 +71,7 @@ export const initializePuppeteer = () => {
             const endCompress = Date.now();
             console.log(`Compress for ${url} took ${endCompress - endSSR}ms`);
 
-            const html: CacheSSR = {
+            const html: SSRCache = {
                 brBuffer,
                 content,
                 gzipBuffer,

@@ -1,4 +1,4 @@
-import { DEFAULT_LIFETIME_CACHE } from './constants';
+import { DEFAULT_LIFETIME_CACHE } from '../constants';
 
 export const createCacheManager = <T>(initialKeys?: string[]) => {
     const cacheStorage = new Map<string, T>();
