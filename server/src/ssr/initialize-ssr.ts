@@ -1,14 +1,16 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable no-throw-literal */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import { DEFAULT_LIFETIME_UNKNOWN_PAGE } from '../constants';
 import { scheduleWithDelay } from '../helpers';
-import type { SSRCache } from '../types';
+import type { SSRCache, SSRCacheKey } from '../types';
 import { createCacheManager } from './cache-manager';
 import { initializePuppeteer } from './initialize-puppeteer';
 
-export const initializeSSR = (initialURLs: string[]) => {
+export const initializeSSR = (initialURLs: SSRCacheKey[]) => {
     const { generateSSR } = initializePuppeteer();
-    const { setCache, getCache, addKey, deleteKey, getKeys, resetTrackedKeys, hasKey } =
+    const { setCache, getCache, addKey, deleteKey, getKeys, getKey, resetTrackedKeys, hasKey } =
         createCacheManager<SSRCache>(initialURLs);
     const ongoingUpdates = new Map<string, () => void>();
 
@@ -23,6 +25,12 @@ export const initializeSSR = (initialURLs: string[]) => {
     const forceUpdate = (url: string, hasStartDelay?: boolean) => {
         ongoingUpdates.get(url)?.();
 
+        const cacheKey = getKey(url);
+
+        if (cacheKey?.isDisabledCache) {
+            return;
+        }
+
         let stop = false;
         const stopUpdate = () => {
             stop = true;
@@ -31,7 +39,7 @@ export const initializeSSR = (initialURLs: string[]) => {
         ongoingUpdates.set(url, stopUpdate);
 
         const task = async () => updateContent(url);
-        scheduleWithDelay({ hasStartDelay, shouldStop, task });
+        scheduleWithDelay({ delay: cacheKey?.refreshTime, hasStartDelay, shouldStop, task });
     };
 
     const getSSRContent = async (url: string) => {
@@ -55,7 +63,7 @@ export const initializeSSR = (initialURLs: string[]) => {
     };
 
     const initializeUpdates = () => {
-        for (const url of getKeys()) {
+        for (const [url] of getKeys()) {
             forceUpdate(url);
         }
     };

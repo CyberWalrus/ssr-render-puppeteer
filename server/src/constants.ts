@@ -1,9 +1,15 @@
+import type { SSRCacheKey } from './types';
+
 export const PORT = 3000;
 export const FILE_REGEXP =
     /\.(js|css|png|jpe?g|gif|svgz?|webp|ico|tif?f|bmp|otf|ttf|eot|woff2?|flac|mp[34]|aif?f|wav|webm|og[gv]|avi|mov|flv|mkv|mka|mks|3gp|mpg|mpeg|vmw|flc|asf|rm|iso|docx?|xlsx?|pptx?|pdf|txt|md|json|xml|csv|tsv|yml|yaml|ini|sh|bat|cmd|exe|dll|so|class|jar|psd|ai|indd|eps|raw)$/i;
 
 export const HOST = 'http://localhost:4173/';
-export const PAGE_LIST = [HOST, `${HOST}about`]
+export const PAGE_LIST: SSRCacheKey[] = [
+    { refreshTime: 10 * 1_000, value: HOST },
+    { value: `${HOST}about` },
+    { isDisabledCache: true, value: `${HOST}test` },
+];
 
 export const DEFAULT_PAGE_SELECTOR = '#root';
 export const PUPPETEER_OPTIONS = { args: ['--no-sandbox'] };

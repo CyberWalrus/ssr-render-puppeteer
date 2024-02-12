@@ -1,20 +1,20 @@
 import express from 'express';
 import { createProxyMiddleware } from 'http-proxy-middleware';
 
-import { HOST, PORT } from './constants';
+import { HOST, PAGE_LIST, PORT } from './constants';
 import { createSSRHandler, errorHandler } from './handlers';
 import { initializeSSR } from './ssr';
 
-const { getSSRContent } = initializeSSR([HOST, `${HOST}about`]);
+const { getSSRContent } = initializeSSR(PAGE_LIST);
 
 const app = express();
 
 app.get('/*', createSSRHandler(getSSRContent));
 
 const staticProxyMiddleware = createProxyMiddleware({
-  target: 'http://localhost:4173',
-  changeOrigin: true,
-  logLevel: 'error'
+    changeOrigin: true,
+    logLevel: 'error',
+    target: HOST,
 });
 
 app.use(staticProxyMiddleware);
