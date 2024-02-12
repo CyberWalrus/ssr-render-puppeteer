@@ -1,6 +1,6 @@
 import type { RequestHandler } from 'express';
 
-import { FILE_REGEXP, PAGE_URL } from '../src/constants';
+import { FILE_REGEXP, HOST } from '../constants';
 import type { SSRCache } from '../types';
 
 export const createSSRHandler =
@@ -12,7 +12,7 @@ export const createSSRHandler =
 
                 return;
             }
-            const fullPageUrl = new URL(req.path, PAGE_URL).toString();
+            const fullPageUrl = new URL(req.path, HOST).toString();
 
             const { content, gzipBuffer, brBuffer } = await getSSRContent(fullPageUrl);
             const acceptEncoding = req.headers['accept-encoding'];

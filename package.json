@@ -4,11 +4,26 @@
     "version": "0.0.0",
     "type": "module",
     "scripts": {
-        "start": "cd client build && yarn dev",
-        "dev": "concurrently \"cd client && yarn preview\" \"cd server && yarn dev:server\"",
-        "install:all": "yarn install && cd client && yarn install && cd ../server && yarn install"
+        "start": "yarn build:client && yarn start:all",
+        "start:all": "concurrently \"yarn preview:client\" \"yarn dev:server\"",
+        "build": "yarn workspaces run build",
+        "build:client": "yarn workspace client build",
+        "preview:client": "yarn workspace client preview",
+        "start:server": "yarn workspace server start",
+        "dev:client": "yarn workspace client dev",
+        "dev:server": "yarn workspace server dev",
+        "lint": "yarn workspaces run lint:check",
+        "install:all": "yarn"
     },
+    "workspaces": [
+        "client",
+        "server"
+    ],
     "devDependencies": {
-        "concurrently": "8.2.2"
+        "@cyber-walrus/configs": "1.0.1",
+        "concurrently": "8.2.2",
+        "nodemon": "3.0.3",
+        "tsc-alias": "1.8.8",
+        "ts-node": "10.9.2"
     }
 }

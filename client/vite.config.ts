@@ -57,13 +57,13 @@ export default defineConfig({
     ],
     resolve: {
         alias: {
-            $__mocks__: resolve(__dirname, './client/__mocks__'),
-            $__tests__: resolve(__dirname, './client/__tests__'),
-            $app: resolve(__dirname, './client/app'),
-            $assets: resolve(__dirname, './client/assets'),
-            $pages: resolve(__dirname, './client/pages'),
-            $shared: resolve(__dirname, './client/shared'),
-            $widgets: resolve(__dirname, './client/widgets'),
+            $__mocks__: resolve(__dirname, './src/__mocks__'),
+            $__tests__: resolve(__dirname, './src/__tests__'),
+            $app: resolve(__dirname, './src/app'),
+            $assets: resolve(__dirname, './src/assets'),
+            $pages: resolve(__dirname, './src/pages'),
+            $shared: resolve(__dirname, './src/shared'),
+            $widgets: resolve(__dirname, './src/widgets'),
         },
     },
 });

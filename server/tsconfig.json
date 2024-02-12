@@ -1,0 +1,37 @@
+{
+    "compilerOptions": {
+        "target": "es2020", // Выбранная цель ECMAScript поддерживает синтаксис ES модулей
+        "module": "esnext", // Использование современной версии ES модулей
+        "moduleResolution": "node", // Старое разрешение модулей (если у вас Node 14 или ниже)
+        "esModuleInterop": true, // Совершенствует интероперабельность импорта для CommonJS модулей
+        "resolveJsonModule": true, // Позволяет импортировать JSON файлы
+        "outDir": "./dist", // Директория, куда будут складываться собранные JS файлы
+        "baseUrl": ".", // Базовый URL для `path`
+        "paths": {}, // Настройки для алиасов модулей
+        "allowSyntheticDefaultImports": true, // Позволяет импортировать модули без дефолтного экспорта как дефолтные
+        "strict": true, // Включает все строгие проверки
+        "forceConsistentCasingInFileNames": true, // Обеспечивает последовательность регистра в именах файлов
+        "isolatedModules": true, // Гарантирует, что каждый файл можно безопасно транспилировать отдельно
+        "skipLibCheck": true // Пропускает проверку типов файлов .d.ts
+    },
+    "include": [
+        "./src/**/*",
+        "types",
+        "storybook",
+        "scripts",
+        "vitest.setup.ts",
+        ".eslintrc.cjs",
+        "*.config.js",
+        "*.config.cjs",
+        "*.config.ts"
+    ],
+    "exclude": [
+        "./build",
+        "../node_modules"
+    ],
+    "typeAcquisition": {
+        "include": [
+            "node"
+        ]
+    }
+}

@@ -1,14 +1,15 @@
 {
-    "extends": "@cyber-walrus/typescript-config/tsconfig.json",
+    "extends": "../tsconfig.json",
     "compilerOptions": {
-        "esModuleInterop": true,
+        "jsx": "react-jsx",
+        "outDir": "./dist",
         "typeRoots": [
             "./types"
         ],
         "baseUrl": "./",
         "paths": {
             "$*": [
-                "client/*"
+                "src/*"
             ]
         },
         "rootDirs": [
@@ -17,7 +18,7 @@
         ],
     },
     "include": [
-        "src",
+        "./**/*",
         "types",
         "storybook",
         "scripts",
@@ -28,6 +29,7 @@
         "*.config.ts"
     ],
     "exclude": [
-        "node_modules"
-    ],
+        "./dist",
+        "../node_modules"
+    ]
 }

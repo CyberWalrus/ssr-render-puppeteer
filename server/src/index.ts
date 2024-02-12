@@ -1,31 +1,27 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
-/* eslint-disable no-console */
 import express from 'express';
-import expressStaticGzip from 'express-static-gzip';
-import { fileURLToPath } from 'node:url';
-import path from 'path';
+import { createProxyMiddleware } from 'http-proxy-middleware';
 
-import { PAGE_URL, PORT } from './constants';
-import { createSSRHandler, errorHandler } from '../handlers';
+import { HOST, PORT } from './constants';
+import { createSSRHandler, errorHandler } from './handlers';
 import { initializeSSR } from './ssr';
 
-const dirname = path.dirname(fileURLToPath(import.meta.url));
-const { getSSRContent } = initializeSSR([PAGE_URL, `${PAGE_URL}about`]);
+const { getSSRContent } = initializeSSR([HOST, `${HOST}about`]);
 
 const app = express();
 
 app.get('/*', createSSRHandler(getSSRContent));
 
-app.use(
-    '/',
-    expressStaticGzip(path.join(dirname, '../dist'), {
-        enableBrotli: true,
-        orderPreference: ['br', 'gz'],
-    }),
-);
-app.use(express.static(path.join(dirname, '../dist')));
+const staticProxyMiddleware = createProxyMiddleware({
+  target: 'http://localhost:4173',
+  changeOrigin: true,
+  logLevel: 'error'
+});
+
+app.use(staticProxyMiddleware);
+
 app.use(errorHandler);
 
 app.listen(PORT, () => {
+    // eslint-disable-next-line no-console
     console.log(`Example app start http://localhost:${PORT}/`);
 });
