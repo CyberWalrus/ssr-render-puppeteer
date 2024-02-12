@@ -46,12 +46,12 @@ export default defineConfig({
         viteCompression({
             algorithm: 'brotliCompress',
             ext: '.br',
-            filter: () => true,
+            filter: (fileName) => /\.(js|css|html|svg)$/.test(fileName),
             threshold: 0,
         }),
         viteCompression({
             algorithm: 'gzip',
-            filter: () => true,
+            filter: (fileName) => /\.(js|css|html|svg)$/.test(fileName),
             threshold: 0,
         }),
     ],
