@@ -39,18 +39,17 @@ export const createCacheManager = <T>(initialKeys?: string[]) => {
         });
     };
 
-    const setCache = (key: string, value: T, expiresIn?: number) => {
+    const setCache = (key: string, value: T, expires?: number) => {
         if (expiryTimers.has(key)) {
             clearTimeout(expiryTimers.get(key));
             expiryTimers.delete(key);
         }
 
-        addKey(key);
         cacheStorage.set(key, value);
 
         const expiryTimer = setTimeout(() => {
             clearTimeoutAndDeleteCache(key);
-        }, expiresIn ?? DEFAULT_LIFETIME_CACHE);
+        }, expires ?? DEFAULT_LIFETIME_CACHE);
 
         expiryTimers.set(key, expiryTimer);
     };

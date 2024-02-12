@@ -8,45 +8,14 @@ import path from 'path';
 import { PAGE_URL, PORT } from './constants';
 import { errorHandler } from './error-handler';
 import { initializeSSR } from './initialize-ssr';
+import { createSSRHandler } from './ssr-handler';
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
-const { getRenderedContent } = initializeSSR([PAGE_URL]);
+const { getSSRContent } = initializeSSR([PAGE_URL, `${PAGE_URL}about`]);
 
 const app = express();
 
-app.get('/*', async (req, res, next) => {
-    try {
-        if (/\.(js|css|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot|otf)$/.test(req.path)) {
-            next();
-
-            return;
-        }
-        const url = `${PAGE_URL}${req.path.replace(/^\//, '')}`;
-        const { content, gzipBuffer, brBuffer } = await getRenderedContent(url);
-        const acceptEncoding = req.headers['accept-encoding'];
-        res.setHeader('Content-Type', 'text/html');
-
-        if (acceptEncoding?.includes('br')) {
-            res.setHeader('Content-Encoding', 'br');
-
-            res.status(200).send(brBuffer);
-
-            return;
-        }
-
-        if (acceptEncoding?.includes('gzip')) {
-            res.setHeader('Content-Encoding', 'gzip');
-
-            res.status(200).send(gzipBuffer);
-
-            return;
-        }
-
-        res.status(200).send(content);
-    } catch (error) {
-        next(error);
-    }
-});
+app.get('/*', createSSRHandler(getSSRContent));
 
 app.use(
     '/',
@@ -59,5 +28,5 @@ app.use(express.static(path.join(dirname, '../dist')));
 app.use(errorHandler);
 
 app.listen(PORT, () => {
-    console.log(`Example app listening on port http://localhost:${PORT}/`);
+    console.log(`Example app start http://localhost:${PORT}/`);
 });
