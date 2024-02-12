@@ -9,7 +9,10 @@ export type SSRCacheKey = {
     isDisabledCache?: boolean;
     isDisabledRefresh?: boolean;
     lifetime?: number;
-    refreshTime?: number;
+    refreshDelay?: number;
+    retryCount?: number;
+    retryDelay?: number;
+    startDelay?: number;
 };
 
 export type ScheduleWithDelayProps = {

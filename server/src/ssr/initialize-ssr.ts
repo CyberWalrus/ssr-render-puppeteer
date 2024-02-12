@@ -39,7 +39,15 @@ export const initializeSSR = (initialURLs: SSRCacheKey[]) => {
         ongoingUpdates.set(url, stopUpdate);
 
         const task = async () => updateContent(url);
-        scheduleWithDelay({ delay: cacheKey?.refreshTime, hasStartDelay, shouldStop, task });
+        scheduleWithDelay({
+            delay: cacheKey?.refreshDelay,
+            hasStartDelay,
+            retryCount: cacheKey?.retryCount,
+            retryDelay: cacheKey?.retryDelay,
+            shouldStop,
+            startDelay: cacheKey?.startDelay,
+            task,
+        });
     };
 
     const getSSRContent = async (url: string) => {

@@ -6,7 +6,7 @@ export const FILE_REGEXP =
 
 export const HOST = 'http://localhost:4173/';
 export const PAGE_LIST: SSRCacheKey[] = [
-    { refreshTime: 10 * 1_000, value: HOST },
+    { refreshDelay: 10 * 1_000, value: HOST },
     { value: `${HOST}about` },
     { isDisabledCache: true, value: `${HOST}test1` },
     { isDisabledRefresh: true, lifetime: 5 * 1_000, value: `${HOST}test2` },
