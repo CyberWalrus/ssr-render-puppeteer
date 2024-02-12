@@ -1,11 +1,11 @@
 import { DEFAULT_LIFETIME_CACHE } from './constants';
 
-export const createCacheManager = (initialUrls?: string[]) => {
-    const cacheStorage = new Map<string, string>();
+export const createCacheManager = <T>(initialKeys?: string[]) => {
+    const cacheStorage = new Map<string, T>();
     const expiryTimers = new Map<string, NodeJS.Timeout>();
-    const initialUrlSet = Array.isArray(initialUrls) ? initialUrls : [];
+    const initialKeySet = Array.isArray(initialKeys) ? initialKeys : [];
 
-    let trackedUrls = new Set<string>([...initialUrlSet]);
+    let trackedKeys = new Set<string>([...initialKeySet]);
 
     const clearTimeoutAndDeleteCache = (key: string) => {
         clearTimeout(expiryTimers.get(key));
@@ -13,25 +13,25 @@ export const createCacheManager = (initialUrls?: string[]) => {
         cacheStorage.delete(key);
     };
 
-    const getUrls = () => [...trackedUrls];
+    const getKeys = () => [...trackedKeys];
 
-    const hasUrl = (url: string) => trackedUrls.has(url);
+    const hasKey = (key: string) => trackedKeys.has(key);
 
-    const addUrl = (url: string) => {
-        trackedUrls.add(url);
+    const addKey = (key: string) => {
+        trackedKeys.add(key);
     };
 
-    const deleteUrl = (url: string) => {
-        trackedUrls.delete(url);
-        clearTimeoutAndDeleteCache(url);
+    const deleteKey = (key: string) => {
+        trackedKeys.delete(key);
+        clearTimeoutAndDeleteCache(key);
     };
 
-    const resetTrackedUrls = (urls: string[]) => {
-        const newTrackedUrls = Array.isArray(urls) ? urls : [];
-        trackedUrls = new Set([...newTrackedUrls]);
+    const resetTrackedKeys = (keys: string[]) => {
+        const newTrackedKeys = Array.isArray(keys) ? keys : [];
+        trackedKeys = new Set([...newTrackedKeys]);
 
         [...expiryTimers.keys()].forEach((key) => {
-            if (trackedUrls.has(key)) {
+            if (trackedKeys.has(key)) {
                 return;
             }
 
@@ -39,13 +39,13 @@ export const createCacheManager = (initialUrls?: string[]) => {
         });
     };
 
-    const setCache = (key: string, value: string, expiresIn?: number) => {
+    const setCache = (key: string, value: T, expiresIn?: number) => {
         if (expiryTimers.has(key)) {
             clearTimeout(expiryTimers.get(key));
             expiryTimers.delete(key);
         }
 
-        addUrl(key);
+        addKey(key);
         cacheStorage.set(key, value);
 
         const expiryTimer = setTimeout(() => {
@@ -57,5 +57,5 @@ export const createCacheManager = (initialUrls?: string[]) => {
 
     const getCache = (key: string) => cacheStorage.get(key);
 
-    return { addUrl, deleteUrl, getCache, getUrls, hasUrl, resetTrackedUrls, setCache };
+    return { addKey, deleteKey, getCache, getKeys, hasKey, resetTrackedKeys, setCache };
 };

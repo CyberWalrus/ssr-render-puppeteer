@@ -3,18 +3,20 @@
 import { createCacheManager } from './cache-manager';
 import { initializePuppeteer } from './initialize-puppeteer';
 import { scheduleWithDelay } from './schedule-with-delay';
+import type { CacheSSR } from './types';
 
 export const initializeSSR = (initialURLs: string[]) => {
     const { generateSSR } = initializePuppeteer();
-    const { setCache, getCache, addUrl, deleteUrl, getUrls, resetTrackedUrls } = createCacheManager(initialURLs);
+    const { setCache, getCache, addKey, deleteKey, getKeys, resetTrackedKeys } =
+        createCacheManager<CacheSSR>(initialURLs);
     const ongoingUpdates = new Map<string, () => void>();
 
     const updateContent = async (url: string) => {
-        const content = await generateSSR(url);
+        const html = await generateSSR(url);
 
-        setCache(url, content);
+        setCache(url, html);
 
-        return content;
+        return html;
     };
 
     const forceUpdate = (url: string, hasStartDelay?: boolean) => {
@@ -46,7 +48,7 @@ export const initializeSSR = (initialURLs: string[]) => {
     };
 
     const initializeUpdates = () => {
-        for (const url of getUrls()) {
+        for (const url of getKeys()) {
             forceUpdate(url);
         }
     };
@@ -54,10 +56,10 @@ export const initializeSSR = (initialURLs: string[]) => {
     initializeUpdates();
 
     return {
-        addUrl,
-        deleteUrl,
+        addUrl: addKey,
+        deleteUrl: deleteKey,
         forceUpdate,
         getRenderedContent,
-        resetTrackedUrls,
+        resetTrackedUrls: resetTrackedKeys,
     };
 };

@@ -1,5 +1,6 @@
 export const PORT = 3000;
 
+export const DEFAULT_PAGE_SELECTOR = '#root';
 export const PAGE_URL = 'http://localhost:4173/';
 export const PUPPETEER_OPTIONS = { args: ['--no-sandbox'] };
 
