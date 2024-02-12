@@ -12,11 +12,11 @@ import { scheduleWithDelay } from '../helpers';
 import type { SSRCache } from '../types';
 
 export const initializePuppeteer = () => {
-    let isLoading = false;
+    let activeLoadingCount = 0;
     let browserInstance = launch(PUPPETEER_OPTIONS);
 
     const refreshBrowser = async () => {
-        if (isLoading) {
+        if (activeLoadingCount > 0) {
             return;
         }
 
@@ -32,7 +32,7 @@ export const initializePuppeteer = () => {
     );
 
     const generateSSR = async (url: string) => {
-        isLoading = true;
+        activeLoadingCount += 1;
         const browser = await browserInstance;
         const page = await browser.newPage();
         const start = Date.now();
@@ -79,8 +79,9 @@ export const initializePuppeteer = () => {
 
             return html;
         } finally {
-            await page.close();
-            isLoading = false;
+            await page.close().catch(console.error);
+
+            activeLoadingCount -= 1;
         }
     };
 
