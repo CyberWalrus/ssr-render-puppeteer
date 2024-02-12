@@ -14,9 +14,15 @@ const { getRenderedContent } = initializeSSR([PAGE_URL]);
 
 const app = express();
 
-app.get('/', async (req, res, next) => {
+app.get('/*', async (req, res, next) => {
     try {
-        const { content, gzipBuffer, brBuffer } = await getRenderedContent(PAGE_URL);
+        if (/\.(js|css|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot|otf)$/.test(req.path)) {
+            next();
+
+            return;
+        }
+        const url = `${PAGE_URL}${req.path.replace(/^\//, '')}`;
+        const { content, gzipBuffer, brBuffer } = await getRenderedContent(url);
         const acceptEncoding = req.headers['accept-encoding'];
         res.setHeader('Content-Type', 'text/html');
 
@@ -41,6 +47,7 @@ app.get('/', async (req, res, next) => {
         next(error);
     }
 });
+
 app.use(
     '/',
     expressStaticGzip(path.join(dirname, '../dist'), {
@@ -49,7 +56,6 @@ app.use(
     }),
 );
 app.use(express.static(path.join(dirname, '../dist')));
-
 app.use(errorHandler);
 
 app.listen(PORT, () => {

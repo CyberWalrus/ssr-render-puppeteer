@@ -10,5 +10,5 @@ export const REFRESH_BROWSER_TIMEOUT = 1_000 * 20;
 
 export const DEFAULT_LOOP_DELAY = 1_000 * 30;
 export const DEFAULT_RETRY_DELAY = 1_000 * 5;
-export const DEFAULT_START_DELAY = 1_000 * 150;
+export const DEFAULT_START_DELAY = 1_000 * 30;
 export const DEFAULT_RETRY_COUNT = 1;
