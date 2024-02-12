@@ -2,7 +2,7 @@
 /* eslint-disable no-console */
 /* eslint-disable no-await-in-loop */
 
-import { DEFAULT_LOOP_DELAY, DEFAULT_RETRY_COUNT, DEFAULT_RETRY_DELAY, DEFAULT_START_DELAY } from '../constants';
+import { DEFAULT_LOOP_DELAY, DEFAULT_RETRY_COUNT, DEFAULT_RETRY_DELAY, DEFAULT_START_DELAY } from '../src/constants';
 import type { ScheduleWithDelayProps } from '../types';
 import { setTimeoutPromise } from './set-timeout-promise';
 

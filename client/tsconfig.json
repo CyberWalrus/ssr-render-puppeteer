@@ -17,8 +17,7 @@
         ],
     },
     "include": [
-        "client",
-        "server",
+        "src",
         "types",
         "storybook",
         "scripts",

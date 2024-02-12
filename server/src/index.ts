@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import path from 'path';
 
 import { PAGE_URL, PORT } from './constants';
-import { createSSRHandler, errorHandler } from './handlers';
+import { createSSRHandler, errorHandler } from '../handlers';
 import { initializeSSR } from './ssr';
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
