@@ -4,8 +4,8 @@
     "version": "0.0.0",
     "type": "module",
     "scripts": {
-        "start": "yarn build:client && yarn start:all",
-        "start:all": "concurrently \"yarn preview:client\" \"yarn dev:server\"",
+        "start": "yarn build && yarn start:all",
+        "start:all": "concurrently \"yarn preview:client\" \"yarn start:server\"",
         "build": "yarn workspaces run build",
         "build:client": "yarn workspace client build",
         "preview:client": "yarn workspace client preview",
@@ -24,6 +24,7 @@
         "concurrently": "8.2.2",
         "nodemon": "3.0.3",
         "tsc-alias": "1.8.8",
-        "ts-node": "10.9.2"
+        "ts-node": "10.9.2",
+        "vite": "5.1.1"
     }
 }

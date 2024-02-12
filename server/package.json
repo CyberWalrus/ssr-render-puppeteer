@@ -5,7 +5,7 @@
     "type": "module",
     "scripts": {
         "dev": "nodemon --es-module-specifier-resolution=node src/index.ts",
-        "build": "tsc src/index.ts --outDir dist",
+        "build": "vite build --ssr src/index.ts",
         "start": "node dist/index.js",
         "ts:check": "tsc --noEmit",
         "eslint:check": "eslint --max-warnings 0 --ext .jsx,.js,.ts,.tsx src/",
