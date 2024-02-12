@@ -27,7 +27,7 @@ export const initializeSSR = (initialURLs: SSRCacheKey[]) => {
 
         const cacheKey = getKey(url);
 
-        if (cacheKey?.isDisabledCache) {
+        if (cacheKey?.isDisabledCache || cacheKey?.isDisabledRefresh) {
             return;
         }
 

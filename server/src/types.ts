@@ -7,6 +7,7 @@ export type SSRCache = {
 export type SSRCacheKey = {
     value: string;
     isDisabledCache?: boolean;
+    isDisabledRefresh?: boolean;
     lifetime?: number;
     refreshTime?: number;
 };
